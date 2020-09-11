@@ -1,3 +1,8 @@
+{- Lab 2
+   Authors: Alexander Korpas, Andreas Hålén, Robin Karlsson
+   Lab group: 42
+ -}
+
 module Blackjack where
 
 import Cards
