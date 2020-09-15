@@ -9,6 +9,7 @@ import Cards
 import RunGame
 
 ------- Some cards --------
+
 aCard1 :: Card
 aCard1 = Card (Numeric 8) Spades
 
@@ -51,6 +52,20 @@ badHand :: Hand
 badHand = [c1, c2, c2]
 
 
+-- get a list of all possible ranks
+--getListOfRanks :: [Card]
+--getListOfRanks = [x | x <- [1..10] ]
+
+
+-- get a list of all possible suits
+getListOfSuits :: [Card]
+getListOfSuits = undefined
+
+
+-- get a list of cards containing a full deck (52 cards), by combining all suits with all ranks
+fullDeck :: Deck
+fullDeck = undefined
+
 -- create a list of strings containing each card
 display :: Hand -> [String]
 display h = [displayCard c | c <- h]
@@ -75,7 +90,6 @@ valueRank _ = 10
 
 -- calculate the value of the cards in this hand
 value :: Hand -> Int
-value [] = 0
 value h
     | val > 21 = val - (numberOfAces h) * 10
     | otherwise = val
@@ -90,7 +104,7 @@ numberOfAces cs = length (filter (\x -> rank x == Ace) cs)
 
 -- check if bust
 gameOver :: Hand -> Bool
-gameOver h = not (value h < 22)
+gameOver h = value h > 21
 
 
 -- check if winner
