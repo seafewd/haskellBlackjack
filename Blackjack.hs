@@ -51,10 +51,21 @@ bankHand = [c2, c3]
 badHand :: Hand
 badHand = [c1, c2, c2]
 
+---------------------------------------
+
+sizeSteps :: [Int]
+sizeSteps = [   size aHand1,
+                size (Card (Numeric 2) Hearts : (Card Jack Spades : [])),
+                1 + size (Card Jack Spades:[]),
+                1 + 1 + size ([]),
+                1 + 1 + 0,
+                2
+            ]
+
 
 -- get a list of all possible ranks
---getListOfRanks :: [Card]
---getListOfRanks = [x | x <- [1..10] ]
+--getListOfRanks :: Deck -> Deck
+--getListOfRanks cs = [rank c | c <- cs ]
 
 
 -- get a list of all possible suits
@@ -65,6 +76,7 @@ getListOfSuits = undefined
 -- get a list of cards containing a full deck (52 cards), by combining all suits with all ranks
 fullDeck :: Deck
 fullDeck = undefined
+
 
 -- create a list of strings containing each card
 display :: Hand -> [String]
