@@ -46,12 +46,20 @@ pimpHand :: Hand
 pimpHand = [c1,c2,c3,c4,c5,c6]
 
 bankHand :: Hand
-bankHand = [c2, c3]
+bankHand = []
+
+anotherHand :: Hand
+anotherHand = [c5, c6]
 
 badHand :: Hand
 badHand = [c1, c2, c2]
 
+deck :: Deck
+deck = fullDeck
+
 ---------------------------------------
+
+--instance Show Rank = 
 
 sizeSteps :: [Int]
 sizeSteps = [   size aHand1,
@@ -64,18 +72,57 @@ sizeSteps = [   size aHand1,
 
 
 -- get a list of all possible ranks
---getListOfRanks :: Deck -> Deck
---getListOfRanks cs = [rank c | c <- cs ]
-
+getListOfRanks :: [Rank]
+getListOfRanks = [
+            Numeric 2,
+            Numeric 3,
+            Numeric 4,
+            Numeric 5,
+            Numeric 6,
+            Numeric 7,
+            Numeric 8,
+            Numeric 9,
+            Numeric 10,
+            Jack,
+            Queen,
+            King,
+            Ace
+            ]
 
 -- get a list of all possible suits
-getListOfSuits :: [Card]
-getListOfSuits = undefined
+getListOfSuits :: [Suit]
+getListOfSuits = [Hearts, Spades, Diamonds, Clubs]
 
 
 -- get a list of cards containing a full deck (52 cards), by combining all suits with all ranks
 fullDeck :: Deck
-fullDeck = undefined
+fullDeck = [ Card x y | x <- getListOfRanks, y <- getListOfSuits]
+
+
+-- draw one card from the deck and put it in a hand
+draw :: Deck -> Hand -> (Deck, Hand)
+draw [] h = error "Deck empty"
+draw d h = (tail d, head d:h)
+
+
+
+------------- TASK B3 -------------
+-----------------------------------
+
+-- draw a card from a deck and give it to the dealer's hand
+-- if dealer's hand is < 15, keep going, otherwise return the hand
+playBank :: Deck -> Hand
+playBank d = playBank' d []
+
+-- auxililary function for playBank
+playBank' :: Deck -> Hand -> [Card]
+playBank' d h
+    | value h > 15 = h
+    | otherwise    = playBank' d' h'
+        where 
+            (d', h') = draw d h 
+-- other way:  |  otherwise = playBank' (fst (draw d h)) (snd (draw d h))
+
 
 
 -- create a list of strings containing each card
