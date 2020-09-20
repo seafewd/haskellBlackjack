@@ -11,6 +11,8 @@ import Test.QuickCheck hiding (shuffle)
 import System.Random
 import Data.List
 
+
+-- Example Cards and Hands for testing in bottom
 {---------------------------}
 
 
@@ -29,70 +31,6 @@ main :: IO ()
 main = runGame implementation
 
 {---------------------------}
-
-
-------- Some cards --------
-{--
-aCard1 :: Card
-aCard1 = Card (Numeric 8) Spades
-
-aCard2 :: Card
-aCard2 = Card Jack Hearts
-
-ace_of_spades :: Card
-ace_of_spades = Card Ace Spades
-
-c1 :: Card
-c1 = Card (Numeric 6) Spades
-
-c2 :: Card
-c2 = Card Jack Hearts
-
-c3 :: Card
-c3 = Card Ace Hearts
-
-c4 :: Card
-c4 = Card Ace Diamonds
-
-c5 :: Card
-c5 = Card Ace Spades
-
-c6 :: Card
-c6 = Card Ace Clubs
-
-
-------- Some hands --------
-aHand1 :: [Card]
-aHand1 = [aCard1, ace_of_spades]
-
-pimpHand :: Hand
-pimpHand = [c1,c2,c3,c4,c5,c6]
-
-bankHand :: Hand
-bankHand = []
-
-anotherHand :: Hand
-anotherHand = [c5, c6]
-
-badHand :: Hand
-badHand = [c1, c2, c2]
-
-deck :: Deck
-deck = fullDeck
-
----------------------------------------}
-
-
--- show recursive steps
-sizeSteps :: [Int]
-sizeSteps = [   size aHand1,
-                size (Card (Numeric 2) Hearts : (Card Jack Spades : [])),
-                1 + size (Card Jack Spades:[]),
-                1 + 1 + size ([]),
-                1 + 1 + 0,
-                2
-            ]
-
 
 -- get a list of all possible ranks
 getListOfRanks :: [Rank]
@@ -128,11 +66,6 @@ playBank' d h
     | otherwise    = playBank' d' h'
         where
             (d', h') = draw d h
-
-
--- generate 52 "random" numbers
-rands :: [Int]
-rands = take 52 $ randoms (mkStdGen 35)
 
 
 -- shuffle a deck
@@ -206,3 +139,65 @@ winner g b
     | gameOver b = Guest
     | value g <= value g = Bank
     | otherwise = Guest
+
+
+-- show recursive steps
+sizeSteps :: [Int]
+sizeSteps = [   size fullDeck,
+                size (Card (Numeric 2) Hearts : (Card Jack Spades : [])),
+                1 + size (Card Jack Spades:[]),
+                1 + 1 + size ([]),
+                1 + 1 + 0,
+                2
+            ]
+
+
+
+------- Some cards --------
+
+aCard1 :: Card
+aCard1 = Card (Numeric 8) Spades
+
+aCard2 :: Card
+aCard2 = Card Jack Hearts
+
+ace_of_spades :: Card
+ace_of_spades = Card Ace Spades
+
+c1 :: Card
+c1 = Card (Numeric 6) Spades
+
+c2 :: Card
+c2 = Card Jack Hearts
+
+c3 :: Card
+c3 = Card Ace Hearts
+
+c4 :: Card
+c4 = Card Ace Diamonds
+
+c5 :: Card
+c5 = Card Ace Spades
+
+c6 :: Card
+c6 = Card Ace Clubs
+
+
+------- Some hands --------
+aHand1 :: [Card]
+aHand1 = [aCard1, ace_of_spades]
+
+pimpHand :: Hand
+pimpHand = [c1,c2,c3,c4,c5,c6]
+
+bankHand :: Hand
+bankHand = []
+
+anotherHand :: Hand
+anotherHand = [c5, c6]
+
+badHand :: Hand
+badHand = [c1, c2, c2]
+
+deck :: Deck
+deck = fullDeck
