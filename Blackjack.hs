@@ -70,7 +70,7 @@ playBank' d h
 -- shuffle a deck
 -- return a list of sorted (by ascending random Ints) cards
 shuffle :: [Double] -> Deck -> Deck
-shuffle deck randoms = [ fst x | x <- ( sortTuples (zip randoms deck) ) ]
+shuffle deck randoms = [ fst x | x <- ( sortTuples $ zip randoms deck) ]
 
 
 -- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Int)
@@ -130,7 +130,7 @@ winner :: Hand -> Hand -> Player
 winner g b
     | gameOver g = Bank
     | gameOver b = Guest
-    | value g <= value g = Bank
+    | value g <= value b = Bank
     | otherwise = Guest
 
 
