@@ -61,7 +61,7 @@ instance Arbitrary Rank where
                         , (9, do n <- choose (2, 10)
                                  return (Numeric n))
                         ]
-                        
+
 
 -- A generator of infinite lists of numbers from 0.0 to 1.0
 -- Needed for assignment F

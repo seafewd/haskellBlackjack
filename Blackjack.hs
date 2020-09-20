@@ -7,6 +7,10 @@ module Blackjack where
 
 import Cards
 import RunGame
+import Test.QuickCheck hiding (shuffle)
+import System.Random
+import Data.List
+
 
 ------- Some cards --------
 
@@ -59,8 +63,9 @@ deck = fullDeck
 
 ---------------------------------------
 
---instance Show Rank = 
 
+
+-- show recursive steps
 sizeSteps :: [Int]
 sizeSteps = [   size aHand1,
                 size (Card (Numeric 2) Hearts : (Card Jack Spades : [])),
@@ -73,21 +78,8 @@ sizeSteps = [   size aHand1,
 
 -- get a list of all possible ranks
 getListOfRanks :: [Rank]
-getListOfRanks = [
-            Numeric 2,
-            Numeric 3,
-            Numeric 4,
-            Numeric 5,
-            Numeric 6,
-            Numeric 7,
-            Numeric 8,
-            Numeric 9,
-            Numeric 10,
-            Jack,
-            Queen,
-            King,
-            Ace
-            ]
+getListOfRanks = [Numeric x | x <- [2..10]] ++ [Jack,Queen,King,Ace]
+
 
 -- get a list of all possible suits
 getListOfSuits :: [Suit]
@@ -101,28 +93,46 @@ fullDeck = [ Card x y | x <- getListOfRanks, y <- getListOfSuits]
 
 -- draw one card from the deck and put it in a hand
 draw :: Deck -> Hand -> (Deck, Hand)
-draw [] h = error "Deck empty"
+draw [] h = error "Deck is empty"
 draw d h = (tail d, head d:h)
 
-
-
-------------- TASK B3 -------------
------------------------------------
 
 -- draw a card from a deck and give it to the dealer's hand
 -- if dealer's hand is < 15, keep going, otherwise return the hand
 playBank :: Deck -> Hand
 playBank d = playBank' d []
 
--- auxililary function for playBank
+
+-- auxiliary function for playBank
 playBank' :: Deck -> Hand -> [Card]
 playBank' d h
     | value h > 15 = h
     | otherwise    = playBank' d' h'
-        where 
-            (d', h') = draw d h 
--- other way:  |  otherwise = playBank' (fst (draw d h)) (snd (draw d h))
+        where
+            (d', h') = draw d h
 
+
+-- generate 52 "random" numbers
+rands :: [Int]
+rands = take 52 $ randoms (mkStdGen 36)
+
+
+-- shuffle a deck
+-- shuffle :: Deck -> [Int] -> Deck ---- return what??
+shuffle deck randoms = do
+    let sorted = sortTuples (zip deck randoms)
+    let newDeck = [ fst x | x <- sorted ]
+    return newDeck
+
+
+-- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Int)
+-- quicksort: divide & conquer strat
+sortTuples :: [(Card, Int)] -> [(Card, Int)]
+sortTuples [] = []
+sortTuples (t:ts) = (sortTuples lesser) ++ [t] ++ (sortTuples greater)
+    where
+        lesser = filter(\x -> snd x < (snd t)) ts
+        greater = filter(\x -> snd x >= (snd t)) ts
 
 
 -- create a list of strings containing each card
@@ -168,7 +178,7 @@ gameOver h = value h > 21
 
 -- check if winner
 winner :: Hand -> Hand -> Player
-winner g b 
+winner g b
     | gameOver g = Bank
     | gameOver b = Guest
     | value g <= value g = Bank
