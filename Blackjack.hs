@@ -136,7 +136,7 @@ winner g b
 
 -- show recursive steps
 sizeSteps :: [Int]
-sizeSteps = [   size fullDeck,
+sizeSteps = [   size aHand1,
                 size (Card (Numeric 2) Hearts : (Card Jack Spades : [])),
                 1 + size (Card Jack Spades:[]),
                 1 + 1 + size ([]),
