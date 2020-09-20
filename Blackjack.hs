@@ -8,7 +8,6 @@ module Blackjack where
 import Cards
 import RunGame
 import Test.QuickCheck hiding (shuffle)
-import System.Random
 import Data.List
 
 
@@ -32,12 +31,12 @@ main = runGame implementation
 
 {---------------------------}
 
--- get a list of all possible ranks
+-- | get a list of all possible ranks
 getListOfRanks :: [Rank]
 getListOfRanks = [Numeric x | x <- [2..10]] ++ [Jack,Queen,King,Ace]
 
 
--- get a list of all possible suits
+-- | get a list of all possible suits
 getListOfSuits :: [Suit]
 getListOfSuits = [Hearts, Spades, Diamonds, Clubs]
 
@@ -72,12 +71,6 @@ playBank' d h
 -- return a list of sorted (by ascending random Ints) cards
 shuffle :: [Double] -> Deck -> Deck
 shuffle deck randoms = [ fst x | x <- ( sortTuples (zip randoms deck) ) ]
-{-- this returns a Monad? why...
-shuffle deck randoms = do
-    let sorted = sortTuples (zip deck randoms)
-    let newDeck = [ fst x | x <- sorted ]
-    return newDeck
---}
 
 
 -- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Int)
@@ -199,5 +192,6 @@ anotherHand = [c5, c6]
 badHand :: Hand
 badHand = [c1, c2, c2]
 
+-- full deck of cards
 deck :: Deck
 deck = fullDeck
