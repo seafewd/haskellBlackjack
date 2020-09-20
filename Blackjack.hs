@@ -11,9 +11,28 @@ import Test.QuickCheck hiding (shuffle)
 import System.Random
 import Data.List
 
+{---------------------------}
+
+
+implementation = Interface
+  {  iFullDeck  = fullDeck
+  ,  iValue     = value
+  ,  iDisplay   = display
+  ,  iGameOver  = gameOver
+  ,  iWinner    = winner
+  ,  iDraw      = draw
+  ,  iPlayBank  = playBank
+  ,  iShuffle   = shuffle
+  }
+
+main :: IO ()
+main = runGame implementation
+
+{---------------------------}
+
 
 ------- Some cards --------
-
+{--
 aCard1 :: Card
 aCard1 = Card (Numeric 8) Spades
 
@@ -61,8 +80,7 @@ badHand = [c1, c2, c2]
 deck :: Deck
 deck = fullDeck
 
----------------------------------------
-
+---------------------------------------}
 
 
 -- show recursive steps
@@ -104,7 +122,7 @@ playBank d = playBank' d []
 
 
 -- auxiliary function for playBank
-playBank' :: Deck -> Hand -> [Card]
+playBank' :: Deck -> Hand -> Deck
 playBank' d h
     | value h > 15 = h
     | otherwise    = playBank' d' h'
@@ -114,30 +132,35 @@ playBank' d h
 
 -- generate 52 "random" numbers
 rands :: [Int]
-rands = take 52 $ randoms (mkStdGen 36)
+rands = take 52 $ randoms (mkStdGen 35)
 
 
 -- shuffle a deck
--- shuffle :: Deck -> [Int] -> Deck ---- return what??
+-- return a list of sorted (by ascending random Ints) cards
+shuffle :: [Double] -> Deck -> Deck
+shuffle deck randoms = [ fst x | x <- ( sortTuples (zip randoms deck) ) ]
+{-- this returns a Monad? why...
 shuffle deck randoms = do
     let sorted = sortTuples (zip deck randoms)
     let newDeck = [ fst x | x <- sorted ]
     return newDeck
+--}
 
 
 -- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Int)
 -- quicksort: divide & conquer strat
-sortTuples :: [(Card, Int)] -> [(Card, Int)]
+sortTuples :: [(Card, Double)] -> [(Card, Double)]
 sortTuples [] = []
 sortTuples (t:ts) = (sortTuples lesser) ++ [t] ++ (sortTuples greater)
     where
-        lesser = filter(\x -> snd x < (snd t)) ts
-        greater = filter(\x -> snd x >= (snd t)) ts
+        lesser = filter( \x -> (snd x) < (snd t) ) ts
+        greater = filter( \x -> (snd x) >= (snd t) ) ts
 
 
 -- create a list of strings containing each card
-display :: Hand -> [String]
-display h = [displayCard c | c <- h]
+display :: Hand -> String
+display [] = []
+display (h:hs) = displayCard h ++ display hs 
 
 
 -- display the card as string

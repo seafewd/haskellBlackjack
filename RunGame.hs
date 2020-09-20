@@ -27,7 +27,7 @@ data Player = Guest | Bank
 
 runGame :: Interface -> IO ()
 runGame i = do
-  putStrLn "Welcome to the game."
+  putStrLn "Welcome to Haskell Blackjack."
   Rand r <- generate arbitrary
   gameLoop i (iShuffle i r (iFullDeck i)) []
 
