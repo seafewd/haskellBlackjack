@@ -86,7 +86,7 @@ sortTuples (t:ts) = (sortTuples lesser) ++ [t] ++ (sortTuples greater)
 -- create a list of strings containing each card
 display :: Hand -> String
 display [] = []
-display (h:hs) = displayCard h ++ display hs 
+display (h:hs) = displayCard h ++ ", " ++ display hs 
 
 
 -- display the card as string
