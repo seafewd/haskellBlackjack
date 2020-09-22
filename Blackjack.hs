@@ -73,7 +73,7 @@ shuffle :: [Double] -> Deck -> Deck
 shuffle deck randoms = [ fst x | x <- ( sortTuples $ zip randoms deck) ]
 
 
--- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Double)
+-- sort a list of tuples consisting of (Card, Double) based on the value of 2nd element (Double)
 -- quicksort: divide & conquer strat
 sortTuples :: [(Card, Double)] -> [(Card, Double)]
 sortTuples [] = []
