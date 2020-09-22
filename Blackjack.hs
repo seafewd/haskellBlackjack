@@ -68,12 +68,12 @@ playBank' d h
 
 
 -- shuffle a deck
--- return a list of sorted (by ascending random Ints) cards
+-- return a list of sorted (by ascending random Doubles) cards
 shuffle :: [Double] -> Deck -> Deck
 shuffle deck randoms = [ fst x | x <- ( sortTuples $ zip randoms deck) ]
 
 
--- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Int)
+-- sort a list of tuples consisting of (Card, Int) based on the value of 2nd element (Double)
 -- quicksort: divide & conquer strat
 sortTuples :: [(Card, Double)] -> [(Card, Double)]
 sortTuples [] = []
@@ -86,6 +86,7 @@ sortTuples (t:ts) = (sortTuples lesser) ++ [t] ++ (sortTuples greater)
 -- create a list of strings containing each card
 display :: Hand -> String
 display [] = []
+display [h] = displayCard h
 display (h:hs) = displayCard h ++ ", " ++ display hs 
 
 
@@ -143,6 +144,26 @@ sizeSteps = [   size aHand1,
                 1 + 1 + 0,
                 2
             ]
+
+
+-- Checks if a given card belongs to a given deck
+belongsTo :: Card -> Deck -> Bool
+c `belongsTo` []      = False
+c `belongsTo` (c':cs) = c == c' || c `belongsTo` cs
+
+
+
+{--------------Tests---------------}
+
+-- Test to ensure the deck size doesnt change after shuffle
+prop_size_shuffle :: Rand -> Deck -> Bool
+prop_size_shuffle (Rand rand) deck = 
+    size deck == size (shuffle rand deck)
+
+-- check that fullDeck has 52 cards
+prop_size_fullDeck :: Bool
+prop_size_fullDeck = size fullDeck == 52
+
 
 
 
